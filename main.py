@@ -1,6 +1,18 @@
 import numpy as np
 
 
+
+class worker():
+    def __init__(self,kind,company,bonusPoints, skills):
+        self.kind = kind
+        self.company = company
+        # self.bonusPoints = bonusPoints
+        self.skills = skills
+        self.potential = 0
+        self.workPotential = 0
+        self.bonusPotential = bonusPoints
+
+
 def get_numbers(lines):
     
     dev_number = None # nr line containing nimber of developers
@@ -29,4 +41,25 @@ map_t = lines[1:size[1] + 1]
 developers = lines[dev_start:men_number]
 menagers = lines[men_start:]
 
+workers = []
+
+for developer in developers:
+
+    developer = developer.split(' ')
+    dev_comp = developer[0]
+    dev_bonus = developer[1]
+    dev_skills = developer[3:]
+    workers.append(worker('_',dev_comp, dev_bonus, dev_skills))
+
+for menager in menagers:
+
+    menager = menager.split(' ')
+    men_comp = menager[0]
+    men_bonus = menager[1]
+    workers.append(worker('M', men_comp, men_bonus, []))
+
+print(workers[-1].company)
+
+
+###
 
