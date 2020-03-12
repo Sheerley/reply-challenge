@@ -34,7 +34,7 @@ def fitness(board):
 
 
 def test_slice(m,i,j,slice_y = 3, slice_x = 3):
-    sliceOfMatrix = [[m[a][b] for b in range(j, j + slice_x)] for a in range(i, i + slice_y)]
+    sliceOfMatrix = [[m[a][b] for b in range(max(j-1,0), j + 2)] for a in range((i-1,0), i + 2)]
     return sliceOfMatrix
 
 class worker():
