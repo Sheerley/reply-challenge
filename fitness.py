@@ -9,7 +9,7 @@ def fitness(board):
                 pass     
             elif(place.kind == "_"):
                 ##creating submatrix
-                submatrix = test_slice(board,rowInd,placeInd)
+                submatrix = test_slice(board,rowInd,placeInd,len(row),len(board))
                 ## skills update for given cell
                 bonusPotential = 0
                 workPotential = 0
@@ -33,8 +33,8 @@ def fitness(board):
     return totalTotalpotential
 
 
-def test_slice(m,i,j,slice_y = 3, slice_x = 3):
-    sliceOfMatrix = [[m[a][b] for b in range(j, j + slice_x)] for a in range(i, i + slice_y)]
+def test_slice(m,i,j,max_x,max_y):
+    sliceOfMatrix = [[m[a][b] for b in range(max(j-1,0), min(j + 2),max_x)] for a in range((i-1,0), min(i + 2),max_y)]
     return sliceOfMatrix
 
 class worker():
