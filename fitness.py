@@ -4,8 +4,10 @@ def fitness(board):
     for rowInd,row in enumerate(board):
         for placeInd, place in enumerate(row):
             if place.kind == '#':
+                #print('dupa #')
                 pass
             elif(place.kind == 'M'):
+                #print('dupa m')
                 ##creating submatrix
                 submatrix = test_slice(board,rowInd,placeInd,len(row),len(board))
                 ## skills update for given cell
@@ -22,8 +24,10 @@ def fitness(board):
                 place.bonusPotential = bonusPotential
                 totalTotalpotential += (workPotential + bonusPotential)         
             elif(place.kind == "_"):
+                #print('dupa _')
                 ##creating submatrix
                 submatrix = test_slice(board,rowInd,placeInd,len(row),len(board))
+                print(submatrix)
                 ## skills update for given cell
                 bonusPotential = 0
                 workPotential = 0
@@ -48,7 +52,7 @@ def fitness(board):
 
 
 def test_slice(m,i,j,max_x,max_y):
-    sliceOfMatrix = [[m[a][b] for b in range(max(j-1,0), min(j + 2),max_x)] for a in range((i-1,0), min(i + 2),max_y)]
+    sliceOfMatrix = [[m[a][b] for b in range(max(j-1,0), min((j + 2),max_x))] for a in range(max(i-1,0), min((i + 2),max_y))]
     return sliceOfMatrix
 
 class worker():

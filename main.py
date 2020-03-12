@@ -45,17 +45,18 @@ menagers = lines[men_start:]
 workers = []
 
 
-def create_worker_from_string(string):
+def create_dev_from_string(string):
     developer = string.split(' ')
-    if developer[0] == "_":
-        dev_comp = developer[0]
-        dev_bonus = developer[1]
-        dev_skills = developer[3:]
-        return worker('_',dev_comp, dev_bonus, dev_skills)
-    else:
-        men_comp = developer[0]
-        men_bonus = developer[1]
-        return worker('M', men_comp, men_bonus, [])
+    dev_comp = developer[0]
+    dev_bonus = developer[1]
+    dev_skills = developer[3:]
+    return worker('_',dev_comp, dev_bonus, dev_skills)
+
+def create_men_from_string(string):
+    developer = string.split(' ')
+    men_comp = developer[0]
+    men_bonus = developer[1]
+    return worker('M', men_comp, men_bonus, [])
 
 ###
 
@@ -63,7 +64,7 @@ mapa = np.array(map_t)
 print(mapa)
 
 POPULATION_SIZE = 50
-POPULATION_MULTIPLIER = 5
+POPULATION_MULTIPLIER = 10
 ITERATIONS = 50
 
 population = []
@@ -81,9 +82,9 @@ def get_map_of_workers(map, numeric_map):
             if map[i][j] == '#':
                 new_line.append(worker('#', 0, 0, 0))
             elif map[i][j] == '_':
-                new_line.append(create_worker_from_string(developers[numeric_map[i][j]]))
+                new_line.append(create_dev_from_string(developers[numeric_map[i][j]]))
             elif map[i][j] == 'M':
-                new_line.append(create_worker_from_string(menagers[numeric_map[i][j]]))
+                new_line.append(create_men_from_string(menagers[numeric_map[i][j]]))
         map_of_workers.append(copy.deepcopy(new_line))
         del new_line
     return map_of_workers
@@ -91,19 +92,24 @@ def get_map_of_workers(map, numeric_map):
 
 
 # genetic algorithm
-for iteration in range(ITERATIONS):
-    new_population = []
-    for _ in range(POPULATION_SIZE * (POPULATION_MULTIPLIER - 1)):
-        parent1 = population[np.random.choice(range(len(population)))]
-        parent2 = population[np.random.choice(range(len(population)))]
-        new_baby = genlib.crossover(mapa, parent1, parent2)
+#for iteration in range(ITERATIONS):
+#    new_population = []
+#    for _ in range(POPULATION_SIZE * (POPULATION_MULTIPLIER - 1)):
+#        parent1 = population[np.random.choice(range(len(population)))]
+#        parent2 = population[np.random.choice(range(len(population)))]
+#        new_baby = genlib.crossover(mapa, parent1, parent2)
 
-        new_population.append([copy.deepcopy(new_baby), fit.fitness(get_map_of_workers(mapa, new_baby))])
-    for parent in population:
-        new_population.append([copy.deepcopy(parent), fit.fitness(get_map_of_workers(mapa, new_baby))])
+#        new_population.append([copy.deepcopy(new_baby), fit.fitness(get_map_of_workers(mapa, new_baby))])
+#    for parent in population:
+#        new_population.append([copy.deepcopy(parent), fit.fitness(get_map_of_workers(mapa, new_baby))])
 
-    sorted_population = [copy.deepcopy(mapa_[0]) for mapa_ in sorted(new_population, key = lambda x: x[1], reverse = True)]
-    del population
-    del new_population
-    population = sorted_population[:POPULATION_SIZE]
-    print(iteration, fit.fitness(get_map_of_workers(mapa, population[-1])))
+#    sorted_population = [copy.deepcopy(mapa_[0]) for mapa_ in sorted(new_population, key = lambda x: x[1], reverse = True)]
+#    del population
+#    del new_population
+#    population = sorted_population[:POPULATION_SIZE]
+#    #print(iteration, fit.fitness(get_map_of_workers(mapa, population[-1])), population[-1])
+
+dobry = [[-1, -1, -1, -1, -1], [-1, 4, -1, -1, 7], [-1, 2, 0, 2, 0]]
+
+num_map = get_map_of_workers(mapa, dobry)
+print(fit.fitness(num_map))
