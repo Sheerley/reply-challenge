@@ -1,5 +1,6 @@
 
 def fitness(board):
+    totalTotalpotential = 0
     for rowInd,row in enumerate(board):
         for placeInd, place in enumerate(row):
             if place.kind == '#':
@@ -26,8 +27,10 @@ def fitness(board):
                                 workPotential += len(skill_difference) * (len(skill_sum) - len(skill_difference))
                 place.workPotential = workPotential
                 place.bonusPotential = bonusPotential
+                totalTotalpotential += (workPotential + bonusPotential)
             else:
                 print("we are screwed")
+    return totalTotalpotential
 
 
 def test_slice(m,i,j,slice_y = 3, slice_x = 3):
