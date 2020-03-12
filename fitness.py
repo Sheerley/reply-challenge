@@ -6,7 +6,21 @@ def fitness(board):
             if place.kind == '#':
                 pass
             elif(place.kind == 'M'):
-                pass     
+                ##creating submatrix
+                submatrix = test_slice(board,rowInd,placeInd,len(row),len(board))
+                ## skills update for given cell
+                bonusPotential = 0
+                workPotential = 0
+                for rowsub in submatrix:
+                    for placesub in rowsub:
+                        if(rowsub != 2 and placesub != 2):
+                            pass
+                        else:
+                            if placesub.company == place.company:
+                                bonusPotential += placesub.potential*(place.potential)
+                place.workPotential = 0
+                place.bonusPotential = bonusPotential
+                totalTotalpotential += (workPotential + bonusPotential)         
             elif(place.kind == "_"):
                 ##creating submatrix
                 submatrix = test_slice(board,rowInd,placeInd,len(row),len(board))

@@ -1,6 +1,7 @@
 import numpy as np
 import copy
-
+import fitness as fit
+import genetic as genlib
 
 class worker():
     def __init__(self,kind,company,bonusPoints, skills):
@@ -11,29 +12,6 @@ class worker():
         self.potential = 0
         self.workPotential = 0
         self.bonusPotential = bonusPoints
-
-def crossover(base_map, map1, map2):
-
-    used_menagers = []
-    used_developers = []
-    map1 = np.array(map1)
-    map2 = np.array(map2)
-    base_map = np.array(base_map)
-    result = copy.deepcopy(map1)
-    
-    for i in range(result.shape[0]):
-        for j in range(result.shape[1]):
-            if base_map[i,j] == '_':
-                if map2[i,j] not in used_developers and np.random.rand() > 0.5:
-                    result[i,j] = map2[i,j]
-            elif base_map[i, j] == 'M':
-                if map2[i.j] not in used_menagers and np.random.rand() > 0.5:
-                    result[i, j] = map2[i,j]
-    
-    return result
-
-    
-
 
 
 def get_numbers(lines):
@@ -66,24 +44,66 @@ menagers = lines[men_start:]
 
 workers = []
 
-for developer in developers:
 
-    developer = developer.split(' ')
-    dev_comp = developer[0]
-    dev_bonus = developer[1]
-    dev_skills = developer[3:]
-    workers.append(worker('_',dev_comp, dev_bonus, dev_skills))
-
-for menager in menagers:
-
-    menager = menager.split(' ')
-    men_comp = menager[0]
-    men_bonus = menager[1]
-    workers.append(worker('M', men_comp, men_bonus, []))
-
-
+def create_worker_from_string(string):
+    developer = string.split(' ')
+    if developer[0] == "_":
+        dev_comp = developer[0]
+        dev_bonus = developer[1]
+        dev_skills = developer[3:]
+        return worker('_',dev_comp, dev_bonus, dev_skills)
+    else:
+        men_comp = developer[0]
+        men_bonus = developer[1]
+        return worker('M', men_comp, men_bonus, [])
 
 ###
 
 mapa = np.array(map_t)
 print(mapa)
+
+POPULATION_SIZE = 50
+POPULATION_MULTIPLIER = 5
+ITERATIONS = 50
+
+population = []
+for _ in range(POPULATION_SIZE):
+    population.append(genlib.generate_map(mapa, developers, menagers))
+
+print(population[30])
+
+
+def get_map_of_workers(map, numeric_map):
+    map_of_workers = []
+    for i in range(len(numeric_map)):
+        new_line = []
+        for j in range(len(numeric_map[i])):
+            if map[i][j] == '#':
+                new_line.append(worker('#', 0, 0, 0))
+            elif map[i][j] == '_':
+                new_line.append(create_worker_from_string(developers[numeric_map[i][j]]))
+            elif map[i][j] == 'M':
+                new_line.append(create_worker_from_string(menagers[numeric_map[i][j]]))
+        map_of_workers.append(copy.deepcopy(new_line))
+        del new_line
+    return map_of_workers
+
+
+
+# genetic algorithm
+for iteration in range(ITERATIONS):
+    new_population = []
+    for _ in range(POPULATION_SIZE * (POPULATION_MULTIPLIER - 1)):
+        parent1 = population[np.random.choice(range(len(population)))]
+        parent2 = population[np.random.choice(range(len(population)))]
+        new_baby = genlib.crossover(mapa, parent1, parent2)
+
+        new_population.append([copy.deepcopy(new_baby), fit.fitness(get_map_of_workers(mapa, new_baby))])
+    for parent in population:
+        new_population.append([copy.deepcopy(parent), fit.fitness(get_map_of_workers(mapa, new_baby))])
+
+    sorted_population = [copy.deepcopy(mapa_[0]) for mapa_ in sorted(new_population, key = lambda x: x[1], reverse = True)]
+    del population
+    del new_population
+    population = sorted_population[:POPULATION_SIZE]
+    print(iteration, fit.fitness(get_map_of_workers(mapa, population[-1])))
