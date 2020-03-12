@@ -24,7 +24,8 @@ def fitness(board):
                                 skill_sum = list( dict.fromkeys(skill_sum))
                                 skill_difference  = [x for x in skill_sum if x not in place.skills]
                                 workPotential += len(skill_difference) * (len(skill_sum) - len(skill_difference))
-
+                place.workPotential = workPotential
+                place.bonusPotential = bonusPotential
             else:
                 print("we are screwed")
 
