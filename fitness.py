@@ -12,8 +12,8 @@ def fitness(board):
                 ## skills update for given cell
                 for rowsub in submatrix:
                     for placesub in rowsub:
-                        calculatedSkillSum += placesub.skills
-                
+                        if(rowsub != 2 and placesub != 2):
+                            
             else:
                 print("we are screwed")
 
@@ -28,6 +28,9 @@ class worker():
         self.company = company
         self.bonusPoints = bonusPoints
         self.skills = skills
+        self.potential = potential
+        self.workPotential = 0
+        self.bonusPotential = 0 
 
 
 
