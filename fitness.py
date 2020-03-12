@@ -1,19 +1,30 @@
+
 def fitness(board):
-    newBoard = []
     for rowInd,row in enumerate(board):
         for placeInd, place in enumerate(row):
             if place == '#':
-                newBoard[rowInd][placeInd] = "#"
+                pass
             elif(place.kind == 'M'):
                 pass     
             elif(place.kind == "_"):
                 ##creating submatrix
                 submatrix = test_slice(board,rowInd,placeInd)
                 ## skills update for given cell
+                bonusPotential = 0
+                workPotential = 0
                 for rowsub in submatrix:
                     for placesub in rowsub:
                         if(rowsub != 2 and placesub != 2):
-                            
+                            pass
+                        else:
+                            if placesub.company == place.company:
+                                bonusPotential += placesub.potential*(place.potential)
+                            if placesub.kind == '_':
+                                skill_sum = place.skills + placesub.kind
+                                skill_sum = list( dict.fromkeys(skill_sum))
+                                skill_difference  = [x for x in skill_sum if x not in place.skills]
+                                workPotential += len(skill_difference) * (len(skill_sum) - len(skill_difference))
+
             else:
                 print("we are screwed")
 
@@ -26,7 +37,6 @@ class worker():
     def __init__(self,kind,company,bonusPoints,potential,skills):
         self.kind = kind
         self.company = company
-        self.bonusPoints = bonusPoints
         self.skills = skills
         self.potential = potential
         self.workPotential = 0
