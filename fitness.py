@@ -2,7 +2,7 @@
 def fitness(board):
     for rowInd,row in enumerate(board):
         for placeInd, place in enumerate(row):
-            if place == '#':
+            if place.kind == '#':
                 pass
             elif(place.kind == 'M'):
                 pass     
