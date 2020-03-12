@@ -1,5 +1,5 @@
 import numpy as np
-
+import copy
 
 
 class worker():
@@ -11,6 +11,29 @@ class worker():
         self.potential = 0
         self.workPotential = 0
         self.bonusPotential = bonusPoints
+
+def crossover(base_map, map1, map2):
+
+    used_menagers = []
+    used_developers = []
+    map1 = np.array(map1)
+    map2 = np.array(map2)
+    base_map = np.array(base_map)
+    result = copy.deepcopy(map1)
+    
+    for i in range(result.shape[0]):
+        for j in range(result.shape[1]):
+            if base_map[i,j] == '_':
+                if map2[i,j] not in used_developers and np.random.rand() > 0.5:
+                    result[i,j] = map2[i,j]
+            elif base_map[i, j] == 'M':
+                if map2[i.j] not in used_menagers and np.random.rand() > 0.5:
+                    result[i, j] = map2[i,j]
+    
+    return result
+
+    
+
 
 
 def get_numbers(lines):
@@ -58,8 +81,9 @@ for menager in menagers:
     men_bonus = menager[1]
     workers.append(worker('M', men_comp, men_bonus, []))
 
-print(workers[-1].company)
 
 
 ###
 
+mapa = np.array(map_t)
+print(mapa)
